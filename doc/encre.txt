@@ -1,0 +1,212 @@
+*encre.txt*                          Inline colour highlighting for Neovim
+
+==============================================================================
+CONTENTS                                                          *encre.nvim*
+
+    1. Introduction ......................... |encre-intro|
+    2. Requirements ......................... |encre-requirements|
+    3. Commands ............................. |encre-commands|
+    4. Lua API .............................. |encre-api|
+    5. Configuration ........................ |encre-config|
+       5.1 Matchers ......................... |encre-config-matchers|
+       5.2 Render modes ..................... |encre-config-mode|
+       5.3 Filetypes ........................ |encre-config-filetypes|
+       5.4 Editor background ................ |encre-config-editor-bg|
+    6. blink.cmp integration ................ |encre-blink|
+    7. Highlights ........................... |encre-highlights|
+    8. Health ............................... |encre-health|
+
+==============================================================================
+1. INTRODUCTION                                                  *encre-intro*
+
+encre.nvim paints colours where they appear in your buffer: hex literals, CSS
+colour functions, named colours inside strings, and colours reported by a
+language server.
+
+Only the lines currently on screen are repainted as you type or scroll, so the
+cost stays flat regardless of file size.
+
+The name is French for "bright", as in `encre-obscur`.
+
+==============================================================================
+2. REQUIREMENTS                                           *encre-requirements*
+
+- Neovim >= 0.11
+- 'termguicolors' enabled
+
+==============================================================================
+3. COMMANDS                                                   *encre-commands*
+
+                                                                      *:Encre*
+:Encre [subcommand]
+        Without an argument, toggles highlighting in the current buffer.
+
+        Subcommands:
+            toggle    Toggle highlighting in the current buffer.
+            attach    Start highlighting the current buffer.
+            detach    Stop highlighting and clear the current buffer.
+            reload    Repaint every attached buffer with the current options.
+
+        An unknown subcommand reports an error and does nothing.
+
+==============================================================================
+4. LUA API                                                         *encre-api*
+
+                                                             *encre.setup()*
+require("encre").setup({opts})
+        Applies {opts} on top of the defaults (|encre-config|) and
+        installs the autocommands that attach matching buffers. Calling it
+        is optional; the defaults apply without it.
+
+                                                            *encre.attach()*
+require("encre").attach({buf})
+        Starts highlighting {buf}, defaulting to the current buffer.
+
+                                                            *encre.detach()*
+require("encre").detach({buf})
+        Stops highlighting {buf} and clears its extmarks.
+
+                                                            *encre.toggle()*
+require("encre").toggle({buf})
+        Attaches {buf} if detached, detaches it otherwise.
+
+                                                            *encre.reload()*
+require("encre").reload({buf})
+        Repaints {buf} with the current options. Repaints every attached
+        buffer when {buf} is omitted.
+
+                                                       *encre.is_attached()*
+require("encre").is_attached({buf})
+        Returns true when {buf} is currently highlighted.
+
+==============================================================================
+5. CONFIGURATION                                                *encre-config*
+
+Defaults: >lua
+
+    require("encre").setup({
+      RGB = true,
+      RRGGBB = true,
+      names = true,
+      css_fn = true,
+      lsp = true,
+      mode = "background",
+      virtualtext = "██",
+      editor_bg = nil,
+      filetypes = { "*" },
+      exclusions = {},
+    })
+<
+------------------------------------------------------------------------------
+5.1 MATCHERS                                           *encre-config-matchers*
+
+RGB                     boolean, default true
+        Highlight three-digit hex literals such as `#f00`. All-digit matches
+        such as `#123` are skipped so issue references are left alone.
+
+RRGGBB                  boolean, default true
+        Highlight six-digit hex literals such as `#ff0000`.
+
+names                   boolean, default true
+        Highlight colour names inside string literals, resolved from Neovim's
+        colour map (see |nvim_get_color_map()|). A name joined to another
+        token by `-`, `_` or `.` is ignored, so `border-red` and `theme.red`
+        stay untouched.
+
+css_fn                  boolean, default true
+        Highlight `rgb()` and `rgba()` calls. An alpha value is blended
+        against the editor background (|encre-config-editor-bg|).
+
+lsp                     boolean, default true
+        Render colours reported through `textDocument/documentColor`. Requests
+        are debounced by 200ms and cached per buffer. While enabled, Neovim's
+        built-in |vim.lsp.document_color| is disabled on attached buffers to
+        avoid duplicate swatches.
+
+------------------------------------------------------------------------------
+5.2 RENDER MODES                                           *encre-config-mode*
+
+mode                    string or list, default "background"
+        How a match is drawn:
+
+            "background"    paint the literal's background
+            "foreground"    tint the literal's text
+            "virtualtext"   draw a swatch glyph before the literal
+
+        A list applies several at once: >lua
+
+            mode = { "background", "virtualtext" }
+<
+        A colour wrapped in square brackets, `[#ff0000]`, is always drawn as a
+        swatch only, keeping the literal readable. Colours reported by a
+        language server behave the same way, as there is no literal for them
+        to paint over.
+
+virtualtext             string, default "██"
+        Glyph used by the "virtualtext" mode.
+
+------------------------------------------------------------------------------
+5.3 FILETYPES                                         *encre-config-filetypes*
+
+filetypes               string[], default { "*" }
+        Filetypes to attach to. `{ "*" }` matches every buffer.
+
+exclusions              string[], default {}
+        Filetypes never attached to, even when `filetypes` would match them.
+
+Buffers with a non-empty 'buftype' are never attached.
+
+------------------------------------------------------------------------------
+5.4 EDITOR BACKGROUND                                 *encre-config-editor-bg*
+
+editor_bg               string, default nil
+        A `#rrggbb` colour used for contrast checks and alpha blending. When
+        nil, the background of the |hl-Normal| highlight is used.
+
+        A colour whose WCAG contrast ratio against this background falls below
+        1.3 is lightened, so a near-black swatch stays visible on a dark
+        colorscheme.
+
+==============================================================================
+6. BLINK.CMP INTEGRATION                                         *encre-blink*
+
+                                                     *encre.blink.kind_icon()*
+require("encre.blink").kind_icon({opts})
+        Returns a blink.cmp `kind_icon` component that paints the icon of a
+        `Color` completion item with the colour that item represents: >lua
+
+            require("blink.cmp").setup({
+              completion = { menu = { draw = { components = {
+                kind_icon = require("encre.blink").kind_icon(),
+              } } } },
+            })
+<
+        {opts} accepts:
+            icon        glyph drawn for colour items, default "󱓻"
+            fallback    component delegated to for non-colour items
+
+                                                        *encre.blink.get_hl()*
+require("encre.blink").get_hl({item})
+        Returns the highlight group for a single completion item, or nil when
+        no colour can be resolved from it. For callers wiring up their own
+        component.
+
+==============================================================================
+7. HIGHLIGHTS                                               *encre-highlights*
+
+Highlight groups are created on demand and named: >
+
+    encre_<mode>_<rrggbb>
+    encre_<mode>_<rrggbb>_a<alpha>     when the colour carries transparency
+<
+Group names keep the colour as written; the rendered colour may differ after
+contrast correction or alpha blending. The cache is rebuilt on |ColorScheme|.
+
+==============================================================================
+8. HEALTH                                                       *encre-health*
+
+Run |:checkhealth| encre to verify the Neovim version, 'termguicolors',
+whether an attached language server provides documentColor, and whether the
+current buffer is highlighted.
+
+vim:tw=78:ts=8:noet:ft=help:norl:
