@@ -1,8 +1,14 @@
-# if.ink
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./assets/logo-dark.svg">
+    <img src="./assets/logo-light.svg" height="120" alt="if.ink">
+  </picture>
+</p>
 
-Inline colour highlighting for Neovim. Paints hex literals, CSS colour
-functions, named colours and LSP-reported colours where they appear in your
-buffer.
+<p align="center">
+  Inline colour highlighting for Neovim — hex literals, CSS colour functions,<br>
+  named colours and the colours a language server reports.
+</p>
 
 ## Requirements
 
