@@ -1,7 +1,7 @@
 describe("health", function()
   it("reports without error", function()
     assert.has_no.error(function()
-      require("encre.health").check()
+      require("if.ink.health").check()
     end)
   end)
 end)

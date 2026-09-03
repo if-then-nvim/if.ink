@@ -1,4 +1,4 @@
--- Minimal environment for the encre.nvim plenary test suite.
+-- Minimal environment for the if.ink plenary test suite.
 --   nvim --headless --noplugin -u tests/minimal_init.lua \
 --     -c "PlenaryBustedDirectory tests/ { minimal_init = 'tests/minimal_init.lua' }"
 local root = vim.fn.fnamemodify(debug.getinfo(1, "S").source:sub(2), ":p:h:h")

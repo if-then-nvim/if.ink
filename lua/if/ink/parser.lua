@@ -5,7 +5,7 @@ local HEX3 = "#(%x%x%x)"
 local WORD = "()(%a+)()"
 local RGBA_PAT = "rgba?%s*%((.-)%)"
 
----@type encre.ColorMap?
+---@type IfInk.ColorMap?
 local COLOR_MAP = nil
 
 local function init_colors()
@@ -17,7 +17,7 @@ end
 
 ---@param col_start integer
 ---@param col_end integer
----@param matches encre.Match[]
+---@param matches IfInk.Match[]
 ---@return boolean
 function M.overlaps(col_start, col_end, matches)
   for _, m in ipairs(matches) do
@@ -104,7 +104,7 @@ local function channel(value)
 end
 
 ---@param line string
----@return encre.Match[]
+---@return IfInk.Match[]
 local function find_rgba(line)
   local results = {}
   local pos = 1
@@ -135,8 +135,8 @@ local function find_rgba(line)
 end
 
 ---@param line string
----@param options encre.Options
----@param matches encre.Match[]
+---@param options IfInk.Options
+---@param matches IfInk.Match[]
 local function scan_hex(line, options, matches)
   ---@type {pattern: string, skip_numeric: boolean, expand: boolean}[]
   local passes = {}
@@ -169,12 +169,12 @@ local function scan_hex(line, options, matches)
 end
 
 ---@param line string
----@param matches encre.Match[]
+---@param matches IfInk.Match[]
 local function scan_names(line, matches)
   if not COLOR_MAP then
     init_colors()
   end
-  ---@cast COLOR_MAP encre.ColorMap
+  ---@cast COLOR_MAP IfInk.ColorMap
 
   local regions = find_string_regions(line)
   local init = 1
@@ -200,10 +200,10 @@ local function scan_names(line, matches)
 end
 
 ---@param line string
----@param options encre.Options
----@return encre.Match[]
+---@param options IfInk.Options
+---@return IfInk.Match[]
 function M.scan_line(line, options)
-  ---@type encre.Match[]
+  ---@type IfInk.Match[]
   local matches = {}
 
   scan_hex(line, options, matches)

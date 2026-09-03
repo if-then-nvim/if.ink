@@ -1,44 +1,42 @@
-*encre.txt*                          Inline colour highlighting for Neovim
+*if-ink.txt*                          Inline colour highlighting for Neovim
 
 ==============================================================================
-CONTENTS                                                          *encre.nvim*
+CONTENTS                                                          *if.ink*
 
-    1. Introduction ......................... |encre-intro|
-    2. Requirements ......................... |encre-requirements|
-    3. Commands ............................. |encre-commands|
-    4. Lua API .............................. |encre-api|
-    5. Configuration ........................ |encre-config|
-       5.1 Matchers ......................... |encre-config-matchers|
-       5.2 Render modes ..................... |encre-config-mode|
-       5.3 Filetypes ........................ |encre-config-filetypes|
-       5.4 Editor background ................ |encre-config-editor-bg|
-    6. blink.cmp integration ................ |encre-blink|
-    7. Highlights ........................... |encre-highlights|
-    8. Health ............................... |encre-health|
+    1. Introduction ......................... |if-ink-intro|
+    2. Requirements ......................... |if-ink-requirements|
+    3. Commands ............................. |if-ink-commands|
+    4. Lua API .............................. |if-ink-api|
+    5. Configuration ........................ |if-ink-config|
+       5.1 Matchers ......................... |if-ink-config-matchers|
+       5.2 Render modes ..................... |if-ink-config-mode|
+       5.3 Filetypes ........................ |if-ink-config-filetypes|
+       5.4 Editor background ................ |if-ink-config-editor-bg|
+    6. blink.cmp integration ................ |if-ink-blink|
+    7. Highlights ........................... |if-ink-highlights|
+    8. Health ............................... |if-ink-health|
 
 ==============================================================================
-1. INTRODUCTION                                                  *encre-intro*
+1. INTRODUCTION                                                  *if-ink-intro*
 
-encre.nvim paints colours where they appear in your buffer: hex literals, CSS
+if.ink paints colours where they appear in your buffer: hex literals, CSS
 colour functions, named colours inside strings, and colours reported by a
 language server.
 
 Only the lines currently on screen are repainted as you type or scroll, so the
 cost stays flat regardless of file size.
 
-The name is French for "bright", as in `encre-obscur`.
-
 ==============================================================================
-2. REQUIREMENTS                                           *encre-requirements*
+2. REQUIREMENTS                                           *if-ink-requirements*
 
 - Neovim >= 0.11
 - 'termguicolors' enabled
 
 ==============================================================================
-3. COMMANDS                                                   *encre-commands*
+3. COMMANDS                                                   *if-ink-commands*
 
-                                                                      *:Encre*
-:Encre [subcommand]
+                                                                      *:IfInk*
+:IfInk [subcommand]
         Without an argument, toggles highlighting in the current buffer.
 
         Subcommands:
@@ -50,41 +48,41 @@ The name is French for "bright", as in `encre-obscur`.
         An unknown subcommand reports an error and does nothing.
 
 ==============================================================================
-4. LUA API                                                         *encre-api*
+4. LUA API                                                         *if-ink-api*
 
-                                                             *encre.setup()*
-require("encre").setup({opts})
-        Applies {opts} on top of the defaults (|encre-config|) and
+                                                             *if.ink.setup()*
+require("if.ink").setup({opts})
+        Applies {opts} on top of the defaults (|if-ink-config|) and
         installs the autocommands that attach matching buffers. Calling it
         is optional; the defaults apply without it.
 
-                                                            *encre.attach()*
-require("encre").attach({buf})
+                                                            *if.ink.attach()*
+require("if.ink").attach({buf})
         Starts highlighting {buf}, defaulting to the current buffer.
 
-                                                            *encre.detach()*
-require("encre").detach({buf})
+                                                            *if.ink.detach()*
+require("if.ink").detach({buf})
         Stops highlighting {buf} and clears its extmarks.
 
-                                                            *encre.toggle()*
-require("encre").toggle({buf})
+                                                            *if.ink.toggle()*
+require("if.ink").toggle({buf})
         Attaches {buf} if detached, detaches it otherwise.
 
-                                                            *encre.reload()*
-require("encre").reload({buf})
+                                                            *if.ink.reload()*
+require("if.ink").reload({buf})
         Repaints {buf} with the current options. Repaints every attached
         buffer when {buf} is omitted.
 
-                                                       *encre.is_attached()*
-require("encre").is_attached({buf})
+                                                       *if.ink.is_attached()*
+require("if.ink").is_attached({buf})
         Returns true when {buf} is currently highlighted.
 
 ==============================================================================
-5. CONFIGURATION                                                *encre-config*
+5. CONFIGURATION                                                *if-ink-config*
 
 Defaults: >lua
 
-    require("encre").setup({
+    require("if.ink").setup({
       RGB = true,
       RRGGBB = true,
       names = true,
@@ -98,7 +96,7 @@ Defaults: >lua
     })
 <
 ------------------------------------------------------------------------------
-5.1 MATCHERS                                           *encre-config-matchers*
+5.1 MATCHERS                                           *if-ink-config-matchers*
 
 RGB                     boolean, default true
         Highlight three-digit hex literals such as `#f00`. All-digit matches
@@ -115,7 +113,7 @@ names                   boolean, default true
 
 css_fn                  boolean, default true
         Highlight `rgb()` and `rgba()` calls. An alpha value is blended
-        against the editor background (|encre-config-editor-bg|).
+        against the editor background (|if-ink-config-editor-bg|).
 
 lsp                     boolean, default true
         Render colours reported through `textDocument/documentColor`. Requests
@@ -124,7 +122,7 @@ lsp                     boolean, default true
         avoid duplicate swatches.
 
 ------------------------------------------------------------------------------
-5.2 RENDER MODES                                           *encre-config-mode*
+5.2 RENDER MODES                                           *if-ink-config-mode*
 
 mode                    string or list, default "background"
         How a match is drawn:
@@ -146,7 +144,7 @@ virtualtext             string, default "██"
         Glyph used by the "virtualtext" mode.
 
 ------------------------------------------------------------------------------
-5.3 FILETYPES                                         *encre-config-filetypes*
+5.3 FILETYPES                                         *if-ink-config-filetypes*
 
 filetypes               string[], default { "*" }
         Filetypes to attach to. `{ "*" }` matches every buffer.
@@ -157,7 +155,7 @@ exclusions              string[], default {}
 Buffers with a non-empty 'buftype' are never attached.
 
 ------------------------------------------------------------------------------
-5.4 EDITOR BACKGROUND                                 *encre-config-editor-bg*
+5.4 EDITOR BACKGROUND                                 *if-ink-config-editor-bg*
 
 editor_bg               string, default nil
         A `#rrggbb` colour used for contrast checks and alpha blending. When
@@ -168,16 +166,16 @@ editor_bg               string, default nil
         colorscheme.
 
 ==============================================================================
-6. BLINK.CMP INTEGRATION                                         *encre-blink*
+6. BLINK.CMP INTEGRATION                                         *if-ink-blink*
 
-                                                     *encre.blink.kind_icon()*
-require("encre.blink").kind_icon({opts})
+                                                     *if.ink.blink.kind_icon()*
+require("if.ink.blink").kind_icon({opts})
         Returns a blink.cmp `kind_icon` component that paints the icon of a
         `Color` completion item with the colour that item represents: >lua
 
             require("blink.cmp").setup({
               completion = { menu = { draw = { components = {
-                kind_icon = require("encre.blink").kind_icon(),
+                kind_icon = require("if.ink.blink").kind_icon(),
               } } } },
             })
 <
@@ -185,27 +183,27 @@ require("encre.blink").kind_icon({opts})
             icon        glyph drawn for colour items, default "󱓻"
             fallback    component delegated to for non-colour items
 
-                                                        *encre.blink.get_hl()*
-require("encre.blink").get_hl({item})
+                                                        *if.ink.blink.get_hl()*
+require("if.ink.blink").get_hl({item})
         Returns the highlight group for a single completion item, or nil when
         no colour can be resolved from it. For callers wiring up their own
         component.
 
 ==============================================================================
-7. HIGHLIGHTS                                               *encre-highlights*
+7. HIGHLIGHTS                                               *if-ink-highlights*
 
 Highlight groups are created on demand and named: >
 
-    encre_<mode>_<rrggbb>
-    encre_<mode>_<rrggbb>_a<alpha>     when the colour carries transparency
+    ifink_<mode>_<rrggbb>
+    ifink_<mode>_<rrggbb>_a<alpha>     when the colour carries transparency
 <
 Group names keep the colour as written; the rendered colour may differ after
 contrast correction or alpha blending. The cache is rebuilt on |ColorScheme|.
 
 ==============================================================================
-8. HEALTH                                                       *encre-health*
+8. HEALTH                                                       *if-ink-health*
 
-Run |:checkhealth| encre to verify the Neovim version, 'termguicolors',
+Run |:checkhealth| if.ink to verify the Neovim version, 'termguicolors',
 whether an attached language server provides documentColor, and whether the
 current buffer is highlighted.
 

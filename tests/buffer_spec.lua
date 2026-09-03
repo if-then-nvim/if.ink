@@ -1,7 +1,7 @@
-local buffer = require "encre.buffer"
-local highlight = require "encre.highlight"
+local buffer = require "if.ink.buffer"
+local highlight = require "if.ink.highlight"
 
-local ns = vim.api.nvim_create_namespace "encre"
+local ns = vim.api.nvim_create_namespace "ifink"
 
 local function make_buf(lines)
   local buf = vim.api.nvim_create_buf(false, true)

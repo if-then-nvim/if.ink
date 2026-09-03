@@ -1,4 +1,4 @@
-local highlight = require "encre.highlight"
+local highlight = require "if.ink.highlight"
 
 local M = {}
 
@@ -31,11 +31,11 @@ local function extract_color(item)
   return nil
 end
 
----@class encre.BlinkOpts
+---@class IfInk.BlinkOpts
 ---@field icon? string glyph drawn for colour items
 ---@field fallback? table component delegated to for non-colour items
 
----@param opts? encre.BlinkOpts
+---@param opts? IfInk.BlinkOpts
 ---@return table
 function M.kind_icon(opts)
   opts = opts or {}

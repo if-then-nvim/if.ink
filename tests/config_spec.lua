@@ -1,4 +1,4 @@
-local config = require "encre.config"
+local config = require "if.ink.config"
 
 describe("config", function()
   before_each(function()
@@ -37,14 +37,14 @@ describe("config", function()
   end)
 
   it("is usable before setup runs", function()
-    local original = package.loaded["encre.config"]
-    package.loaded["encre.config"] = nil
-    local fresh = require "encre.config"
+    local original = package.loaded["if.ink.config"]
+    package.loaded["if.ink.config"] = nil
+    local fresh = require "if.ink.config"
     local opts = fresh.get()
     assert.is_true(opts.RRGGBB)
     assert.is_true(opts.lsp)
     assert.are.equal("background", opts.mode)
-    package.loaded["encre.config"] = original
+    package.loaded["if.ink.config"] = original
   end)
 
   it("does not mutate defaults", function()

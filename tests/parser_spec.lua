@@ -1,4 +1,4 @@
-local parser = require "encre.parser"
+local parser = require "if.ink.parser"
 
 local RRGGBB = { RRGGBB = true }
 local RGB = { RGB = true }

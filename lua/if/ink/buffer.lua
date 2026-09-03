@@ -1,17 +1,17 @@
-local parser = require "encre.parser"
-local highlight = require "encre.highlight"
-local lsp = require "encre.lsp"
+local parser = require "if.ink.parser"
+local highlight = require "if.ink.highlight"
+local lsp = require "if.ink.lsp"
 
 local M = {}
 
-local ns = vim.api.nvim_create_namespace "encre"
-local augroup = vim.api.nvim_create_augroup("encre_buffer", { clear = true })
+local ns = vim.api.nvim_create_namespace "ifink"
+local augroup = vim.api.nvim_create_augroup("ifink_buffer", { clear = true })
 
----@type encre.AttachedMap
+---@type IfInk.AttachedMap
 local attached = {}
 
----@param mode encre.Mode|encre.Mode[]
----@return encre.Mode[]
+---@param mode IfInk.Mode|IfInk.Mode[]
+---@return IfInk.Mode[]
 local function normalize_modes(mode)
   if type(mode) == "table" then
     return mode
@@ -39,7 +39,7 @@ end
 
 ---@param buf integer
 ---@param row integer
----@param options encre.Options
+---@param options IfInk.Options
 local function highlight_line(buf, row, options)
   local line = vim.api.nvim_buf_get_lines(buf, row, row + 1, false)[1]
   if not line then
@@ -115,7 +115,7 @@ local function refresh_all(buf)
 end
 
 ---@param buf integer
----@param options encre.Options
+---@param options IfInk.Options
 function M.attach(buf, options)
   if attached[buf] then
     return
@@ -184,7 +184,7 @@ function M.detach(buf)
 end
 
 ---@param buf integer
----@param options encre.Options
+---@param options IfInk.Options
 function M.toggle(buf, options)
   if attached[buf] then
     M.detach(buf)
@@ -194,7 +194,7 @@ function M.toggle(buf, options)
 end
 
 ---@param buf? integer
----@param options encre.Options
+---@param options IfInk.Options
 function M.reload(buf, options)
   local targets = {}
   if buf then

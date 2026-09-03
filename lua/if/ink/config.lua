@@ -1,6 +1,6 @@
 local M = {}
 
----@type encre.Options
+---@type IfInk.Options
 M.defaults = {
   RGB = true,
   RRGGBB = true,
@@ -13,15 +13,15 @@ M.defaults = {
   lsp = true,
 }
 
----@type encre.Options
+---@type IfInk.Options
 M.options = vim.deepcopy(M.defaults)
 
----@param opts? encre.Options
+---@param opts? IfInk.Options
 function M.setup(opts)
   M.options = vim.tbl_deep_extend("force", {}, M.defaults, opts or {})
 end
 
----@return encre.Options
+---@return IfInk.Options
 function M.get()
   return M.options
 end

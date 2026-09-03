@@ -1,11 +1,11 @@
-local config = require "encre.config"
-local buffer = require "encre.buffer"
-local highlight = require "encre.highlight"
-local parser = require "encre.parser"
+local config = require "if.ink.config"
+local buffer = require "if.ink.buffer"
+local highlight = require "if.ink.highlight"
+local parser = require "if.ink.parser"
 
 local M = {}
 
-local augroup = vim.api.nvim_create_augroup("encre", { clear = true })
+local augroup = vim.api.nvim_create_augroup("if.ink", { clear = true })
 
 ---@param buf integer
 ---@return boolean
@@ -25,7 +25,7 @@ local function should_attach(buf)
   return vim.tbl_contains(filetypes, "*") or vim.tbl_contains(filetypes, ft)
 end
 
----@param opts? encre.Options
+---@param opts? IfInk.Options
 function M.setup(opts)
   config.setup(opts)
   highlight.set_editor_bg(config.get().editor_bg)

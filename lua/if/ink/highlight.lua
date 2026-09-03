@@ -1,6 +1,6 @@
 local M = {}
 
----@type encre.HighlightCache
+---@type IfInk.HighlightCache
 local CACHE = {}
 
 local CONTRAST_THRESHOLD = 1.3
@@ -9,11 +9,11 @@ local GAMMA = 1.5
 ---@type string?
 local user_editor_bg = nil
 
----@type encre.RGB?
+---@type IfInk.RGB?
 local editor_bg = nil
 
 ---@param hex string
----@return encre.RGB
+---@return IfInk.RGB
 local function parse_hex(hex)
   hex = hex:gsub("^#", "")
   return {
@@ -23,7 +23,7 @@ local function parse_hex(hex)
   }
 end
 
----@return encre.RGB?
+---@return IfInk.RGB?
 local function get_editor_bg()
   if editor_bg then
     return editor_bg
@@ -73,8 +73,8 @@ local function lighten(r, g, b)
     math.floor(255 * (b / 255) ^ (1 / GAMMA))
 end
 
----@param fg encre.RGB
----@param bg encre.RGB
+---@param fg IfInk.RGB
+---@param bg IfInk.RGB
 ---@param alpha number
 ---@return integer, integer, integer
 local function alpha_blend(fg, bg, alpha)
@@ -89,7 +89,7 @@ local function readable_fg(r, g, b)
 end
 
 ---@param rgb_hex string six hex digits, without a leading `#`
----@param mode encre.Mode
+---@param mode IfInk.Mode
 ---@param alpha? number 0-1, blended against the editor background
 ---@return string hl_group
 function M.ensure(rgb_hex, mode, alpha)
@@ -99,7 +99,7 @@ function M.ensure(rgb_hex, mode, alpha)
     return CACHE[key]
   end
 
-  local name = "encre_" .. key:gsub("%.", "d")
+  local name = "ifink_" .. key:gsub("%.", "d")
   local r = tonumber(rgb_hex:sub(1, 2), 16) or 0
   local g = tonumber(rgb_hex:sub(3, 4), 16) or 0
   local b = tonumber(rgb_hex:sub(5, 6), 16) or 0

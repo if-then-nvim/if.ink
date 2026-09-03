@@ -1,4 +1,4 @@
-local lsp = require "encre.lsp"
+local lsp = require "if.ink.lsp"
 
 describe("lsp", function()
   it("returns empty for unknown buffer", function()

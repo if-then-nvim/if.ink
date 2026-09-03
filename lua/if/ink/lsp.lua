@@ -1,12 +1,12 @@
 local M = {}
 
----@type encre.LspColorCache
+---@type IfInk.LspColorCache
 local cache = {}
 
----@type encre.TimerMap
+---@type IfInk.TimerMap
 local timers = {}
 
----@type encre.AutocmdMap
+---@type IfInk.AutocmdMap
 local autocmd_ids = {}
 
 local DEBOUNCE_MS = 200
@@ -51,7 +51,7 @@ function M.request(buf, callback)
       return
     end
 
-    ---@type table<integer, encre.Match[]>
+    ---@type table<integer, IfInk.Match[]>
     local buf_colors = {}
     for _, item in ipairs(result) do
       local row = item.range.start.line
@@ -99,7 +99,7 @@ end
 
 ---@param buf integer
 ---@param row integer
----@return encre.Match[]
+---@return IfInk.Match[]
 function M.get_colors(buf, row)
   if not cache[buf] then
     return {}
@@ -114,7 +114,7 @@ function M.attach(buf, callback)
     return
   end
 
-  local augroup = vim.api.nvim_create_augroup("encre_lsp_" .. buf, { clear = true })
+  local augroup = vim.api.nvim_create_augroup("ifink_lsp_" .. buf, { clear = true })
 
   local ids = {}
 
@@ -159,7 +159,7 @@ end
 ---@param buf integer
 function M.detach(buf)
   if autocmd_ids[buf] then
-    vim.api.nvim_del_augroup_by_name("encre_lsp_" .. buf)
+    vim.api.nvim_del_augroup_by_name("ifink_lsp_" .. buf)
     autocmd_ids[buf] = nil
   end
 

@@ -1,4 +1,4 @@
-local blink = require "encre.blink"
+local blink = require "if.ink.blink"
 
 describe("blink", function()
   local function ctx(kind, item)
@@ -7,15 +7,15 @@ describe("blink", function()
 
   describe("get_hl", function()
     it("resolves a colour from documentation", function()
-      assert.are.equal("encre_virtualtext_ff0000", blink.get_hl { documentation = "#ff0000" })
+      assert.are.equal("ifink_virtualtext_ff0000", blink.get_hl { documentation = "#ff0000" })
     end)
 
     it("resolves a colour from a documentation table", function()
-      assert.are.equal("encre_virtualtext_00ff00", blink.get_hl { documentation = { value = "swatch #00ff00" } })
+      assert.are.equal("ifink_virtualtext_00ff00", blink.get_hl { documentation = { value = "swatch #00ff00" } })
     end)
 
     it("resolves a colour from detail", function()
-      assert.are.equal("encre_virtualtext_0000ff", blink.get_hl { detail = "#0000ff" })
+      assert.are.equal("ifink_virtualtext_0000ff", blink.get_hl { detail = "#0000ff" })
     end)
 
     it("returns nil without a colour", function()
@@ -35,7 +35,7 @@ describe("blink", function()
 
     it("highlights colour items with the item's own colour", function()
       local component = blink.kind_icon()
-      assert.are.equal("encre_virtualtext_ff0000", component.highlight(ctx("Color", { detail = "#ff0000" })))
+      assert.are.equal("ifink_virtualtext_ff0000", component.highlight(ctx("Color", { detail = "#ff0000" })))
     end)
 
     it("falls back for non-colour kinds", function()

@@ -1,10 +1,8 @@
-# encre.nvim
+# if.ink
 
 Inline colour highlighting for Neovim. Paints hex literals, CSS colour
 functions, named colours and LSP-reported colours where they appear in your
 buffer.
-
-`encre` is French for *ink*.
 
 ## Requirements
 
@@ -17,11 +15,15 @@ With [lazy.nvim](https://github.com/folke/lazy.nvim):
 
 ```lua
 {
-  "if-then-end/encre.nvim",
+  "if-then-nvim/if.ink",
+  main = "if.ink",
   event = "BufReadPre",
   opts = {},
 }
 ```
+
+`main` is not optional. Without it lazy.nvim infers `if` from the
+directory layout, and if.nvim ships `lua/if/init.lua`.
 
 ## Usage
 
@@ -29,30 +31,30 @@ Buffers matching `filetypes` are attached automatically. To control it by hand:
 
 | Command          | Description                                        |
 | ---------------- | -------------------------------------------------- |
-| `:Encre`         | Toggle highlighting in the current buffer          |
-| `:Encre toggle`  | Same as above                                      |
-| `:Encre attach`  | Start highlighting the current buffer              |
-| `:Encre detach`  | Stop highlighting and clear the current buffer     |
-| `:Encre reload`  | Repaint every attached buffer with current options |
+| `:IfInk`         | Toggle highlighting in the current buffer          |
+| `:IfInk toggle`  | Same as above                                      |
+| `:IfInk attach`  | Start highlighting the current buffer              |
+| `:IfInk detach`  | Stop highlighting and clear the current buffer     |
+| `:IfInk reload`  | Repaint every attached buffer with current options |
 
 The same actions are available from Lua:
 
 ```lua
-require("encre").attach()
-require("encre").detach()
-require("encre").toggle()
-require("encre").reload()
-require("encre").is_attached()
+require("if.ink").attach()
+require("if.ink").detach()
+require("if.ink").toggle()
+require("if.ink").reload()
+require("if.ink").is_attached()
 ```
 
-Run `:checkhealth encre` to verify your setup.
+Run `:checkhealth if.ink` to verify your setup.
 
 ## Configuration
 
 Defaults:
 
 ```lua
-require("encre").setup({
+require("if.ink").setup({
   RGB = true,               -- #f00
   RRGGBB = true,            -- #ff0000
   names = true,             -- "red" inside string literals
@@ -105,7 +107,7 @@ require("blink.cmp").setup({
     menu = {
       draw = {
         components = {
-          kind_icon = require("encre.blink").kind_icon(),
+          kind_icon = require("if.ink.blink").kind_icon(),
         },
       },
     },
@@ -117,7 +119,7 @@ require("blink.cmp").setup({
 non-colour items to another component:
 
 ```lua
-require("encre.blink").kind_icon({
+require("if.ink.blink").kind_icon({
   icon = "󱓻",
   fallback = require("blink.cmp.completion.windows.render.tailwind"),
 })
@@ -125,7 +127,7 @@ require("encre.blink").kind_icon({
 
 ## Highlight groups
 
-Groups are created on demand and named `encre_<mode>_<rrggbb>`, with an
+Groups are created on demand and named `ifink_<mode>_<rrggbb>`, with an
 `_a<alpha>` suffix when a colour carries transparency. They are cached and
 rebuilt when the colorscheme changes.
 

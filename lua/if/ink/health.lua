@@ -9,7 +9,7 @@ local function version_ok()
 end
 
 function M.check()
-  vim.health.start "encre.nvim"
+  vim.health.start "if.ink"
 
   if version_ok() then
     vim.health.ok("Neovim " .. tostring(vim.version()))
@@ -27,7 +27,7 @@ function M.check()
     })
   end
 
-  local options = require("encre.config").get()
+  local options = require("if.ink.config").get()
 
   if options.lsp then
     local clients = vim.lsp.get_clients { method = "textDocument/documentColor" }
@@ -44,10 +44,10 @@ function M.check()
   end
 
   local buf = vim.api.nvim_get_current_buf()
-  if require("encre").is_attached(buf) then
+  if require("if.ink").is_attached(buf) then
     vim.health.ok "Attached to the current buffer"
   else
-    vim.health.info "Not attached to the current buffer; run `:Encre attach` to enable it here"
+    vim.health.info "Not attached to the current buffer; run `:IfInk attach` to enable it here"
   end
 end
 
