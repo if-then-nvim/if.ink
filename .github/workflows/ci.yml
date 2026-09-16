@@ -5,6 +5,9 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+
 env:
   STYLUA_VERSION: v2.5.2
   SELENE_VERSION: 0.31.0
