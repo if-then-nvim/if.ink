@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <img src="./assets/demo.png" width="766" alt="A Lua palette table in Neovim: every hex literal carries a colour swatch rendered inline beside it.">
+  <img src="./assets/hero.webp" width="100%" alt="hex literals, CSS colour functions and named colours highlighted inline">
 </p>
 
 ## Requirements
