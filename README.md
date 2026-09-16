@@ -10,6 +10,10 @@
   named colours and the colours a language server reports.
 </p>
 
+<p align="center">
+  <img src="./assets/demo.png" width="766" alt="A Lua palette table in Neovim: every hex literal carries a colour swatch rendered inline beside it.">
+</p>
+
 ## Requirements
 
 - Neovim >= 0.11
